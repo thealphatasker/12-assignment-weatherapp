@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather APP</title>
+  </head>
+  <body>
+    <h1>Weather APP</h1>
+    <hr />
+    <br />
+    <br />
+
+    <form
+      onsubmit="
+        checkWeather();
+        return false;
+      "
+    >
+      <label for="user-city">City Name: </label>
+      <input
+        type="text"
+        name="user-city"
+        id="user-city"
+        placeholder="e.g. Lahore"
+      />
+      <br />
+      <br />
+      <button type="submit">🌡️ Check Weather</button>
+    </form>
+    <br />
+    <div id="show-weather"></div>
+
+    <!-- JS CODE -->
+    <script>
+      function checkWeather() {
+        const userCityRef = document.querySelector("#user-city").value;
+        const theResultRef = document.querySelector("#show-weather");
+
+        const weatherApi = fetch(
+          `https://p2pclouds.up.railway.app/v1/learn/weather?city=${userCityRef}`,
+        );
+
+        weatherApi
+          .then((data) => {
+            return data.json();
+          })
+          .then((data) => {
+            theResultRef.innerHTML = `📍 ${userCityRef} temperature is:  ${data.current.temp_c}c <br> Feels like:  ${data.current.feelslike_c} <br> Humidity:  ${data.current.humidity}<br>Last Updated:  ${data.current.last_updated}`;
+          })
+          .catch((err) => {
+            theResultRef.innerHTML = "oo, there is something wrong :/";
+          });
+      }
+    </script>
+  </body>
+</html>
