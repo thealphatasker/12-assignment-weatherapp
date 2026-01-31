@@ -8,8 +8,7 @@
   <body>
     <h1>Weather APP</h1>
     <hr />
-    <br />
-    <br />
+    <br /><br />
 
     <form
       onsubmit="
@@ -23,11 +22,12 @@
         name="user-city"
         id="user-city"
         placeholder="e.g. Lahore"
+        required
       />
-      <br />
-      <br />
+      <br /><br />
       <button type="submit">🌡️ Check Weather</button>
     </form>
+
     <br />
     <div id="show-weather"></div>
 
@@ -37,19 +37,23 @@
         const userCityRef = document.querySelector("#user-city").value;
         const theResultRef = document.querySelector("#show-weather");
 
-        const weatherApi = fetch(
-          `https://p2pclouds.up.railway.app/v1/learn/weather?city=${userCityRef}`,
-        );
+        const API_KEY = "cbdade7bde0366db77e1ff1053ad99d1";
 
-        weatherApi
+        fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${userCityRef}&appid=${API_KEY}&units=metric`,
+        )
+          .then((response) => response.json())
           .then((data) => {
-            return data.json();
-          })
-          .then((data) => {
-            theResultRef.innerHTML = `📍 ${userCityRef} temperature is:  ${data.current.temp_c}c <br> Feels like:  ${data.current.feelslike_c} <br> Humidity:  ${data.current.humidity}<br>Last Updated:  ${data.current.last_updated}`;
+            theResultRef.innerHTML = `
+              📍 <b>${data.name}</b><br>
+              🌡️ Temperature: ${data.main.temp} °C<br>
+              🤗 Feels Like: ${data.main.feels_like} °C<br>
+              💧 Humidity: ${data.main.humidity}%<br>
+              🌥️ Weather: ${data.weather[0].description}
+            `;
           })
           .catch((err) => {
-            theResultRef.innerHTML = "oo, there is something wrong :/";
+            theResultRef.innerHTML = "Oops! Something went wrong 😕";
           });
       }
     </script>
